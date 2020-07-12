@@ -3,8 +3,8 @@
 var firebase = require("firebase");
 
 // Add the Firebase products that you want to use
-require("firebase/auth");
-require("firebase/firestore");
+// require("firebase/auth");
+// require("firebase/firestore");
 
 // TODO: Replace the following with your app's Firebase project configuration
 var firebaseConfig = {
@@ -21,6 +21,24 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-firebase.database().ref('/projects/').set({project1: {name: 'project 1'}})
+const update = (path, data) => new Promise((resolve, reject) => {
+    return firebase.database().ref(path).update(data)
+        .then(resolve)
+        .catch(reject);
+});
+
+const setIn = (path, data) => new Promise((resolve, reject) => {
+    return firebase.database().ref(path).set(data)
+        .then(resolve)
+        .catch(reject);
+});
+
+module.exports = {
+    update,
+    setIn
+}
+
+
+// firebase.database().ref('/projects/').set({project1: {name: 'project 1'}})
     // .then(resolve)
     // .catch(reject);
