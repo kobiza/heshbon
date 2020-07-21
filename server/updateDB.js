@@ -1,4 +1,5 @@
 const fs = require('fs');
+const _ = require('lodash');
 const xlsx = require('node-xlsx');
 const DB = require('./DB')
 
@@ -95,7 +96,7 @@ const getFileData = (fileFullPath) => {
 }
 
 const updateDataFromFiles = (folderName) => {
-    const folderPath = `${__dirname}/${folderName}`
+    const folderPath = `${__dirname}/files/${folderName}`
     const dataToAdd = {}
 
     fs.readdir(folderPath, (err, files) => {
@@ -107,7 +108,9 @@ const updateDataFromFiles = (folderName) => {
             Object.assign(dataToAdd, fileData)
         });
 
-        DB.setIn('/transactions/', dataToAdd)
+        _.forEach(dataToAdd, (date, key) => {
+            DB.setIn(`/transactions/${key}/`, date)
+        })
     });
 }
 
@@ -125,5 +128,4 @@ const updateTransactionsAdditionalData = (additionalDataTitle) => (cardKey, inde
 //
 // updateRecordStatus('2270__02_04_20', 0, 'checked')
 updateDataFromFiles('files_to_read')
-
 

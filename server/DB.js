@@ -33,9 +33,23 @@ const setIn = (path, data) => new Promise((resolve, reject) => {
         .catch(reject);
 });
 
+const push = (path, data) => new Promise((resolve, reject) => {
+    return firebase.database().ref(path).push(data)
+        .then(resolve)
+        .catch(reject);
+});
+
+const read = path => new Promise((resolve, reject) => {
+    firebase.database().ref(path).once('value')
+        .then(snapshot => resolve(snapshot.val()))
+        .catch(reject);
+});
+
 module.exports = {
     update,
-    setIn
+    setIn,
+    push,
+    read
 }
 
 
